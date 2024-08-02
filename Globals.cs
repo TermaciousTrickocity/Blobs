@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace HaloBlobViewer
 {
@@ -13,5 +14,6 @@ namespace HaloBlobViewer
         public static CacheSelector cacheForm;
 
         public static string BIPath;
+        public static string tagPath;
     }
 }

@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HaloBlobViewer.source.formats;
+using Ookii;
+using Ookii.Dialogs.WinForms;
 
 namespace HaloBlobViewer
 {
@@ -18,6 +20,7 @@ namespace HaloBlobViewer
     {
         public mainform form;
         string BlobIndexFile = "";
+        string tagCacheFile = "";
 
         public mainform()
         {
@@ -37,11 +40,16 @@ namespace HaloBlobViewer
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = tag_cache_folder_browser.ShowDialog();
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+            
+            dialog.InitialDirectory = "c:\\Users\\";
+            dialog.Filter = "DAT Files (*.dat)|*.dat";
+            DialogResult result = dialog.ShowDialog();
+
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                string cache_folder = tag_cache_folder_browser.SelectedPath;
-                BlobIndexFile = cache_folder + "\\blob_index.dat";
+                string cache_folder = dialog.FileName;
+                BlobIndexFile = cache_folder;
                 Globals.BIPath = BlobIndexFile;
                 debug_output.Text = cache_folder;
                 BlobIndex BI = new BlobIndex();
@@ -130,6 +138,67 @@ namespace HaloBlobViewer
                 tagStatus.Text = "Done!";
             }
         }
+
+        private void TagViewToolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+
+            dialog.InitialDirectory = "c:\\Users\\";
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string tags = dialog.FileName;
+                tagCacheFile = tags;
+                Globals.tagPath = tagCacheFile;
+                debug_output.Text = tags;
+                TagExtract TC = new TagExtract();
+                TC.ParseTag(tags);
+                //ParseTagCache(cache_folder);
+            }
+            else if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                //Nothing
+            }
+        }
+
+        private void mainform_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TagViewTSLoadedTag_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tagStatus_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TagViewPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CacheLoadPBar_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+
 
 
         /*
@@ -299,5 +368,5 @@ BinaryReader()
         }
         */
 
-    }
+    
 }

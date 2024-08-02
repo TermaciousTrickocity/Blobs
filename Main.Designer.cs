@@ -1,4 +1,7 @@
 ﻿
+using System.Runtime.InteropServices;
+using System;
+
 namespace HaloBlobViewer
 {
     partial class mainform
@@ -20,7 +23,19 @@ namespace HaloBlobViewer
             }
             base.Dispose(disposing);
         }
+        
+       
+        ////////////////////////////////////////////////////////////////////// Force Dark Window too
+      
+        [DllImport("DwmApi")] //System.Runtime.InteropServices
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (DwmSetWindowAttribute(Handle, 19, new[] { 1 }, 4) != 0)
+                DwmSetWindowAttribute(Handle, 20, new[] { 1 }, 4);
+        }
+        ////////////////////////////////////////////////////////////////////// Lord Save my Eyes
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -37,6 +52,7 @@ namespace HaloBlobViewer
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.tag_cache_folder_browser = new System.Windows.Forms.FolderBrowserDialog();
             this.debug_output = new System.Windows.Forms.TextBox();
             this.loaded_cache_string = new System.Windows.Forms.TextBox();
@@ -46,20 +62,22 @@ namespace HaloBlobViewer
             this.CacheLoadPBar = new System.Windows.Forms.ProgressBar();
             this.TagViewToolStrip = new System.Windows.Forms.ToolStrip();
             this.TagViewPanel = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.TagViewTSLoadedTag = new System.Windows.Forms.TextBox();
             this.tagStatus = new System.Windows.Forms.Label();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.TagViewTSLoadedTag = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.maintoolstrip.SuspendLayout();
             this.TagViewPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // maintoolstrip
             // 
-            this.maintoolstrip.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.maintoolstrip.BackColor = System.Drawing.Color.DarkOrange;
             this.maintoolstrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.maintoolstrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolstripfile,
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
             this.maintoolstrip.Location = new System.Drawing.Point(0, 0);
             this.maintoolstrip.Name = "maintoolstrip";
             this.maintoolstrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -104,13 +122,23 @@ namespace HaloBlobViewer
             // 
             // toolStripButton1
             // 
-            this.toolStripButton1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.toolStripButton1.BackColor = System.Drawing.Color.DarkOrange;
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(92, 22);
             this.toolStripButton1.Text = "Renderdoc CSV";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(71, 22);
+            this.toolStripButton2.Text = "Export Tags";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // tag_cache_folder_browser
             // 
@@ -121,26 +149,30 @@ namespace HaloBlobViewer
             // 
             this.debug_output.AcceptsReturn = true;
             this.debug_output.AcceptsTab = true;
-            this.debug_output.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.debug_output.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.debug_output.Location = new System.Drawing.Point(260, 669);
+            this.debug_output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.debug_output.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.debug_output.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.debug_output.ForeColor = System.Drawing.Color.LightGray;
+            this.debug_output.Location = new System.Drawing.Point(323, 590);
             this.debug_output.Multiline = true;
             this.debug_output.Name = "debug_output";
             this.debug_output.ReadOnly = true;
             this.debug_output.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.debug_output.Size = new System.Drawing.Size(1189, 48);
+            this.debug_output.Size = new System.Drawing.Size(1123, 128);
             this.debug_output.TabIndex = 1;
             this.debug_output.TextChanged += new System.EventHandler(this.debug_output_TextChanged);
             // 
             // loaded_cache_string
             // 
             this.loaded_cache_string.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.loaded_cache_string.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.loaded_cache_string.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.loaded_cache_string.Location = new System.Drawing.Point(265, 650);
+            this.loaded_cache_string.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.loaded_cache_string.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loaded_cache_string.ForeColor = System.Drawing.Color.LightGray;
+            this.loaded_cache_string.Location = new System.Drawing.Point(323, 569);
             this.loaded_cache_string.Name = "loaded_cache_string";
             this.loaded_cache_string.ReadOnly = true;
-            this.loaded_cache_string.Size = new System.Drawing.Size(750, 13);
+            this.loaded_cache_string.Size = new System.Drawing.Size(750, 21);
             this.loaded_cache_string.TabIndex = 2;
             this.loaded_cache_string.Text = "No Tag Cache Currently Loaded";
             this.loaded_cache_string.WordWrap = false;
@@ -160,9 +192,10 @@ namespace HaloBlobViewer
             // 
             // tag_tree
             // 
-            this.tag_tree.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.tag_tree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tag_tree.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tag_tree.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tag_tree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tag_tree.ForeColor = System.Drawing.Color.LightGray;
             this.tag_tree.FullRowSelect = true;
             this.tag_tree.HideSelection = false;
             this.tag_tree.ImageIndex = 0;
@@ -170,7 +203,7 @@ namespace HaloBlobViewer
             this.tag_tree.Location = new System.Drawing.Point(0, 25);
             this.tag_tree.Name = "tag_tree";
             this.tag_tree.SelectedImageIndex = 1;
-            this.tag_tree.Size = new System.Drawing.Size(260, 688);
+            this.tag_tree.Size = new System.Drawing.Size(317, 688);
             this.tag_tree.TabIndex = 5;
             this.tag_tree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tag_tree_AfterSelect);
             // 
@@ -186,74 +219,102 @@ namespace HaloBlobViewer
             // 
             // CacheLoadPBar
             // 
-            this.CacheLoadPBar.Location = new System.Drawing.Point(1259, 650);
+            this.CacheLoadPBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.CacheLoadPBar.Location = new System.Drawing.Point(1268, 574);
             this.CacheLoadPBar.Name = "CacheLoadPBar";
             this.CacheLoadPBar.Size = new System.Drawing.Size(190, 13);
             this.CacheLoadPBar.TabIndex = 6;
+            this.CacheLoadPBar.Click += new System.EventHandler(this.CacheLoadPBar_Click);
             // 
             // TagViewToolStrip
             // 
-            this.TagViewToolStrip.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.TagViewToolStrip.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.TagViewToolStrip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.TagViewToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.TagViewToolStrip.Location = new System.Drawing.Point(0, 0);
             this.TagViewToolStrip.Name = "TagViewToolStrip";
             this.TagViewToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.TagViewToolStrip.Size = new System.Drawing.Size(1189, 25);
+            this.TagViewToolStrip.Size = new System.Drawing.Size(1122, 25);
             this.TagViewToolStrip.TabIndex = 0;
             this.TagViewToolStrip.Text = "TagViewToolStrip";
+            this.TagViewToolStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.TagViewToolStrip_ItemClicked);
             // 
             // TagViewPanel
             // 
+            this.TagViewPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TagViewPanel.AutoScroll = true;
-            this.TagViewPanel.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.TagViewPanel.AutoSize = true;
+            this.TagViewPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.TagViewPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.TagViewPanel.Controls.Add(this.comboBox1);
             this.TagViewPanel.Controls.Add(this.TagViewTSLoadedTag);
             this.TagViewPanel.Controls.Add(this.TagViewToolStrip);
+            this.TagViewPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TagViewPanel.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.TagViewPanel.Location = new System.Drawing.Point(260, 25);
+            this.TagViewPanel.Location = new System.Drawing.Point(323, 25);
+            this.TagViewPanel.Margin = new System.Windows.Forms.Padding(0);
             this.TagViewPanel.Name = "TagViewPanel";
-            this.TagViewPanel.Size = new System.Drawing.Size(1189, 619);
+            this.TagViewPanel.Size = new System.Drawing.Size(1126, 540);
             this.TagViewPanel.TabIndex = 7;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Meta Viewer",
-            "Raw Viewer",
-            "Hex Viewer"});
-            this.comboBox1.Location = new System.Drawing.Point(272, 0);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
-            this.comboBox1.Text = "Meta Viewer";
-            // 
-            // TagViewTSLoadedTag
-            // 
-            this.TagViewTSLoadedTag.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.TagViewTSLoadedTag.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TagViewTSLoadedTag.Location = new System.Drawing.Point(0, 3);
-            this.TagViewTSLoadedTag.Name = "TagViewTSLoadedTag";
-            this.TagViewTSLoadedTag.ReadOnly = true;
-            this.TagViewTSLoadedTag.Size = new System.Drawing.Size(219, 13);
-            this.TagViewTSLoadedTag.TabIndex = 1;
-            this.TagViewTSLoadedTag.Text = "No Tag Loaded";
+            this.TagViewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.TagViewPanel_Paint);
             // 
             // tagStatus
             // 
-            this.tagStatus.Location = new System.Drawing.Point(1149, 650);
+            this.tagStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.tagStatus.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.tagStatus.Location = new System.Drawing.Point(1147, 574);
             this.tagStatus.Name = "tagStatus";
             this.tagStatus.Size = new System.Drawing.Size(115, 13);
             this.tagStatus.TabIndex = 8;
             this.tagStatus.Text = "0/0";
             this.tagStatus.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.tagStatus.Click += new System.EventHandler(this.tagStatus_Click);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(13, 22);
+            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            // 
+            // TagViewTSLoadedTag
+            // 
+            this.TagViewTSLoadedTag.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.TagViewTSLoadedTag.ForeColor = System.Drawing.Color.LightGray;
+            this.TagViewTSLoadedTag.Location = new System.Drawing.Point(0, 0);
+            this.TagViewTSLoadedTag.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.TagViewTSLoadedTag.Name = "TagViewTSLoadedTag";
+            this.TagViewTSLoadedTag.ReadOnly = true;
+            this.TagViewTSLoadedTag.Size = new System.Drawing.Size(219, 21);
+            this.TagViewTSLoadedTag.TabIndex = 1;
+            this.TagViewTSLoadedTag.Text = "No Tag Loaded\r\n";
+            this.TagViewTSLoadedTag.TextChanged += new System.EventHandler(this.TagViewTSLoadedTag_TextChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.comboBox1.ForeColor = System.Drawing.Color.LightGray;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Meta Viewer",
+            "Raw Viewer",
+            "Hex Viewer"});
+            this.comboBox1.Location = new System.Drawing.Point(234, -2);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.TabIndex = 2;
+            this.comboBox1.Text = "Meta Viewer";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // mainform
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1449, 713);
             this.Controls.Add(this.tagStatus);
             this.Controls.Add(this.TagViewPanel);
@@ -263,10 +324,12 @@ namespace HaloBlobViewer
             this.Controls.Add(this.loaded_cache_string);
             this.Controls.Add(this.debug_output);
             this.Controls.Add(this.maintoolstrip);
-            this.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.ForeColor = System.Drawing.Color.Black;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "mainform";
             this.Text = "Blob Viewer";
+            this.Load += new System.EventHandler(this.mainform_Load);
             this.maintoolstrip.ResumeLayout(false);
             this.maintoolstrip.PerformLayout();
             this.TagViewPanel.ResumeLayout(false);
@@ -291,11 +354,13 @@ namespace HaloBlobViewer
         public System.Windows.Forms.ImageList tag_tree_image_list;
         private System.Windows.Forms.ToolStrip TagViewToolStrip;
         private System.Windows.Forms.Panel TagViewPanel;
-        private System.Windows.Forms.TextBox TagViewTSLoadedTag;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         public System.Windows.Forms.ProgressBar CacheLoadPBar;
         public System.Windows.Forms.Label tagStatus;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox TagViewTSLoadedTag;
     }
 }
 

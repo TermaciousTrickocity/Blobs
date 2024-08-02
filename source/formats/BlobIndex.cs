@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HaloBlobViewer.source.helpers;
+using HaloBlobViewer;
 
 namespace HaloBlobViewer.source.formats
 {
@@ -68,35 +69,6 @@ namespace HaloBlobViewer.source.formats
 
         public static FileStream Blob = new FileStream(Globals.BIPath, FileMode.Open);
         public static BinaryReader BinRead = new BinaryReader(Blob);
-
-        public Int32 GetBlobIndexSize()
-        {
-            if(BlobIndexSize == 0)
-            {
-                Blob.Seek(24, SeekOrigin.Begin);
-                BlobIndexSize = endianessconverter.ReadInt32BE(BinRead);
-                Blob.Seek(0, SeekOrigin.Begin);
-                return BlobIndexSize;
-            }
-            else
-            {
-                return BlobIndexSize;
-            }
-        }
-        public Int32 GetNumberOfTags()
-        {
-            if (NumberOfTags == 0)
-            {
-                Blob.Seek(72, SeekOrigin.Begin);
-                NumberOfTags = endianessconverter.ReadInt32BE(BinRead);
-                Blob.Seek(0, SeekOrigin.Begin);
-                return NumberOfTags;
-            }
-            else
-            {
-                return NumberOfTags;
-            }
-        }
 
         public Int32 NumMetaBlobs()
         {
@@ -274,9 +246,9 @@ namespace HaloBlobViewer.source.formats
 
         public void ParseTagCache()
         {
-            if (File.Exists(Globals.BIPath))
+            
+        if (File.Exists(Globals.BIPath))
             {
-                var NumTags = GetNumberOfTags();
                 switch(NumMetaBlobs())
                 {
                     case 0:
